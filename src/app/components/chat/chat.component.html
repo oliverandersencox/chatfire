@@ -1,0 +1,27 @@
+
+
+<ng-container *ngIf="chat$ | async as chat">
+
+  <div class="chat-wrapper">
+
+    <div *ngFor="let message of chat; trackBy: trackByUpdatedAt">
+
+      <div class="user">
+        <img [src]="message.user>.picture"/>
+        <p>{{ message.user?.displayName || message.user?.firstName }}</p>
+      </div>
+
+      <p>{{ message.content }}</p>
+      
+
+    </div>
+
+  </div>
+
+</ng-container>
+
+<div class="form">
+  <input (keydown.enter)="send()" [{ngModel}]="message">
+
+  <button (click)="send()">Send</button>
+</div>
