@@ -1,27 +1,66 @@
+<ng-container *ngIf="!chat$">
+  <div class="flex-center flex-col">
+    <h1>Getting Communicating</h1>
+    <ng-container *ngIf="chats$">
+      <p>Join one of our chat rooms from the list below</p>
+    </ng-container>
+
+    <ng-container *ngIf="chats.length > 0">
+      <div class="chat-list flex-col">
+        <div class="flex-row chat-item" *ngFor="let c of chats" (click)="goToChat(c.uid)">
+          <div class="icon flex-center">
+            <img src="assets/chat.png" />
+          </div>
+          <div class="title">
+            <p>{{ c?.nickname || c?.uid }}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="hr-sect">Or</div>
+
+    <p>Create a new chat room</p>
+
+    <div class="input-group input-group-lg">
+
+      <input type="text" class="form-control" placeholder="Give your chat a name..." #name aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-lg">
+        
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon1" (click)="create(name)">Lets Chat</button>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
 
 
-<ng-container *ngIf="chat$ | async as chat">
+<ng-container *ngIf="chat$ | async as chat; trackBy: trackByUpdatedAt">
 
-  <div class="chat-wrapper">
+  <div class="flex-row header">
+    <img class="back-btn" src="assets/back.png"  (click)="goBack()"/>
 
-    <div *ngFor="let message of chat; trackBy: trackByUpdatedAt">
+    <h1>Chat - {{chat.nickname}}</h1>
+  </div>
+  <div class="chat-wrapper flex-col">
+
+    <div class="flex-row message" *ngFor="let message of chat.messages">
 
       <div class="user">
-        <img [src]="message.user>.picture"/>
-        <p>{{ message.user?.displayName || message.user?.firstName }}</p>
+        <img [src]="message.user?.photoURL" />
       </div>
 
-      <p>{{ message.content }}</p>
-      
+      <p>{{ message?.content }}</p>
 
+    </div>
+
+    <div class="form flex-row">
+      <input (keydown.enter)="send(chat.uid)" [(ngModel)]="message">
+
+      <button (click)="send(chat.uid)">Send</button>
     </div>
 
   </div>
 
 </ng-container>
-
-<div class="form">
-  <input (keydown.enter)="send()" [{ngModel}]="message">
-
-  <button (click)="send()">Send</button>
-</div>

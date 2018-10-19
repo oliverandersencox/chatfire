@@ -1,0 +1,81 @@
+p, h1 {
+    color: white;
+}
+
+h1 {
+    font-size: 50px;
+    font-weight: bold;
+}
+.input-group {
+    margin-top: 40px;
+}
+
+.chat-list {
+    width: 500px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.chat-item {
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.icon {
+    width: 50px
+    
+}
+.icon img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.title {
+    margin-left: 15px;
+    align-items: center;
+    display: flex;
+}
+
+.title p {
+    padding: 0;
+    margin: 0;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.chat-wrapper {
+    width: 50vw;
+    height: 60vh;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.form {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px
+}
+
+.form input {
+    width: 70%;
+    height: 40px;
+}
+.form button {
+    width: 30%;
+    height: 40px;
+    flex:1;
+    background: #1abc9c;
+    color: white;
+}
+

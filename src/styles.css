@@ -1,3 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~bootstrap/scss/bootstrap-reboot';
-@import '~bootstrap/scss/bootstrap-grid';
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+body {
+    background: #232526; /* fallback for old browsers */
+}
+
+/* Flex Box */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* buttons */
+.btn {
+    display: block;
+    padding: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    background: white;
+    color: black;
+    border-radius: 5px;
+    text-transform: uppercase;
+} 
+.btn-outline-light {
+    border: 2px solid white;
+    background: none;
+    color: white;
+    font-weight: bold;
+}

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { of, Observable } from 'rxjs';
-import { take, switchMap, first, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { User } from '../models/user';
 import { auth } from 'firebase';
 
@@ -12,35 +12,58 @@ import { auth } from 'firebase';
 })
 export class AuthService {
 
-  user$: Observable<User>;
+  user$: BehaviorSubject<User> = new BehaviorSubject(null);
+  authenticationState = new BehaviorSubject(false);
 
   constructor(private firestoreService: FirestoreService,
     private angularFireAuth: AngularFireAuth,
-    private router: Router) { }
-
+    private router: Router) {
+    this.checkAuth();
+  }
 
   /**
-   * ListenToAuth
-   * Listens to the authentication state and returns user when authenticated
+   * Check Auth
+   * Gets the firebase auth object and checks for an active user
    */
-  listenToAuth() {
-    this.user$ = this.angularFireAuth.authState.pipe(
-      switchMap(user => {
-        if (user) {
-          return this.firestoreService.doc$<any>(`'users/${user.uid}`);
+  checkAuth() {
+    this.angularFireAuth.authState
+      .subscribe((user) => {
+
+        this.getUserFromDatabase(user.uid);
+
+        if (auth !== null) {
+          this.authenticationState.next(true);
         } else {
-          return of(null);
+          this.authenticationState.next(false);
         }
-      })
-    );
+      });
+  }
+
+  /**
+   * Is Authenticated
+   * simple checks the authstate subject's value
+   */
+  isAuthenticated() {
+    return this.authenticationState.value;
+  }
+
+  /**
+   * Get User From Database
+   * @param uid
+   * Find the user in the database and returns it as a promise
+   * Then adds to the subject
+   */
+  async getUserFromDatabase(uid: string) {
+    const user = await this.firestoreService.doc$<User>(`users/${uid}`).pipe(first()).toPromise();
+    this.user$.next(user);
   }
 
   /**
    * GetUser
-   * Returns the user as a promise ready for use with async / await
+   * Returns the user
    */
   getUser() {
-    return this.user$.pipe(first()).toPromise();
+    return this.user$;
   }
 
   /**
@@ -76,7 +99,7 @@ export class AuthService {
       photoURL
     };
 
-    return this.firestoreService.upsert(`users/${userData.uid}`, userData);
+    return this.firestoreService.update(`users/${userData.uid}`, userData);
   }
 
   /**
